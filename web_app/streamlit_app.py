@@ -14,15 +14,29 @@ from src.data_preprocessing import create_features
 @st.cache_resource
 def load_models():
     try:
+        # Get the directory where this script is located
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        # Get the project root directory (parent of web_app)
+        project_root = os.path.dirname(script_dir)
+        
+        # Construct absolute paths to model files
+        models_dir = os.path.join(project_root, 'models')
+        logistic_path = os.path.join(models_dir, 'logistic_regression.pkl')
+        rf_path = os.path.join(models_dir, 'random_forest.pkl')
+        preprocessor_path = os.path.join(models_dir, 'preprocessor.pkl')
+        
         st.write(f"Current working directory: {os.getcwd()}")
-        st.write(f"logistic_regression.pkl exists: {os.path.exists('models/logistic_regression.pkl')}")
-        st.write(f"random_forest.pkl exists: {os.path.exists('models/random_forest.pkl')}")
-        st.write(f"preprocessor.pkl exists: {os.path.exists('models/preprocessor.pkl')}")
+        st.write(f"Project root: {project_root}")
+        st.write(f"Models directory: {models_dir}")
+        st.write(f"logistic_regression.pkl exists: {os.path.exists(logistic_path)}")
+        st.write(f"random_forest.pkl exists: {os.path.exists(rf_path)}")
+        st.write(f"preprocessor.pkl exists: {os.path.exists(preprocessor_path)}")
+        
         models = {
-            'Logistic Regression': joblib.load('models/logistic_regression.pkl'),
-            'Random Forest': joblib.load('models/random_forest.pkl')
+            'Logistic Regression': joblib.load(logistic_path),
+            'Random Forest': joblib.load(rf_path)
         }
-        preprocessor = joblib.load('models/preprocessor.pkl')
+        preprocessor = joblib.load(preprocessor_path)
         return models, preprocessor
     except Exception as e:
         st.error(f"Models not found! Please run main_training.py first. Error: {e}")
